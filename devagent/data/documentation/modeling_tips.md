@@ -41,10 +41,3 @@
 3. **Test Guards**: Ensure guards don't create deadlocks
 4. **Initialize Properly**: Set initial states and variable values
 5. **Check Couplings**: Verify all port connections are valid
-
-## Performance Optimization
-
-1. **Minimize State Space**: Use fewer states when possible
-2. **Efficient Guards**: Keep guard conditions simple
-3. **Reduce Couplings**: Minimize unnecessary connections
-4. **Batch Processing**: Process multiple events together when possible
