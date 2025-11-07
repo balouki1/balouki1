@@ -2,7 +2,7 @@
 
 ## Overview
 
-FPDEVSML (Formal Parallel DEVS Modeling Language) is an XML-based specification language for defining discrete-event simulation models following the DEVS (Discrete Event System Specification) formalism.
+FPDEVSML (Formal Parallel DEVS Modeling Language) is an text-based specification language for defining discrete-event simulation models following the DEVS (Discrete Event System Specification) formalism.
 
 ## Model Types
 
@@ -11,6 +11,7 @@ FPDEVSML (Formal Parallel DEVS Modeling Language) is an XML-based specification 
 Atomic models are the basic building blocks of DEVS models. They contain:
 
 - **Ports**: Input and output interfaces
+- **Parameters**: Set of model parameters
 - **States**: Discrete states the model can be in
 - **Variables**: Data storage
 - **Transitions**: State change logic
@@ -18,17 +19,17 @@ Atomic models are the basic building blocks of DEVS models. They contain:
 
 #### Structure
 
-```xml
-<model name="ModelName" type="atomic">
-  <description>Model description</description>
-  <ports>...</ports>
-  <states>...</states>
-  <variables>...</variables>
-  <transitions>...</transitions>
-  <functions>...</functions>
-  <initialization>...</initialization>
-</model>
-```
+<atomic> → <identifier> "("
+    <section parameters>
+    <section state>
+    <section in ports>
+    <section out ports>
+    <section delta int>
+    <section delta ext>
+    <section delta conf>
+    <section ta>
+    <section output>
+")" ;
 
 ### Coupled Models
 
@@ -36,17 +37,21 @@ Coupled models compose multiple submodels (atomic or coupled) through port conne
 
 #### Structure
 
-```xml
-<model name="ModelName" type="coupled">
-  <description>Model description</description>
-  <submodels>...</submodels>
-  <couplings>...</couplings>
-  <ports>...</ports>
-  <externalCouplings>...</externalCouplings>
-</model>
-```
+<coupled> → <identifier> "("
+    <section in ports>
+    <section out ports>
+    <section parameters>
+    <component models>
+    [<external in connections>]
+    [<external out connections>]
+    [<internal connections>]
+")" ;
 
 ## Core Elements
+
+### Parameters
+P: (param1, param2, ...) ∈ (R, N, ...) = (default1, default2, ...);
+
 
 ### Ports
 
