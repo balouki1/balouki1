@@ -1,0 +1,36 @@
+# Core dependencies
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# LLM & AI
+openai==1.10.0
+anthropic==0.18.0
+langchain==0.1.4
+langchain-community==0.0.16
+
+# Vector search & embeddings
+faiss-cpu==1.7.4
+sentence-transformers==2.3.1
+rank-bm25==0.2.2
+
+# Data processing
+numpy==1.26.3
+pandas==2.1.4
+
+# Storage & persistence
+aiosqlite==0.19.0
+python-multipart==0.0.6
+
+# Logging & monitoring
+structlog==24.1.0
+python-json-logger==2.0.7
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0
+
+# Development
+python-dotenv==1.0.0

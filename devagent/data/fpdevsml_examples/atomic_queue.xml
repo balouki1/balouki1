@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="MM1Queue" type="atomic">
+  <description>
+    An M/M/1 queue model with exponential inter-arrival and service times.
+    Customers arrive, wait in queue if server is busy, get served, and depart.
+  </description>
+
+  <ports>
+    <input name="arrive" type="customer"/>
+    <output name="depart" type="customer"/>
+  </ports>
+
+  <states>
+    <state name="idle" initial="true"/>
+    <state name="busy"/>
+  </states>
+
+  <variables>
+    <variable name="queue" type="list" initial="[]"/>
+    <variable name="currentCustomer" type="customer" initial="null"/>
+    <variable name="arrivalRate" type="real" value="5.0"/>
+    <variable name="serviceRate" type="real" value="10.0"/>
+  </variables>
+
+  <transitions>
+    <transition from="idle" to="busy" event="arrive">
+      <guard>queue.isEmpty()</guard>
+      <action>
+        currentCustomer = input.customer;
+        schedule(serviceTime(), "endService");
+      </action>
+    </transition>
+
+    <transition from="idle" to="idle" event="arrive">
+      <guard>!queue.isEmpty()</guard>
+      <action>
+        queue.add(input.customer);
+      </action>
+    </transition>
+
+    <transition from="busy" to="idle" event="endService">
+      <guard>queue.isEmpty()</guard>
+      <action>
+        output.depart = currentCustomer;
+        currentCustomer = null;
+      </action>
+    </transition>
+
+    <transition from="busy" to="busy" event="endService">
+      <guard>!queue.isEmpty()</guard>
+      <action>
+        output.depart = currentCustomer;
+        currentCustomer = queue.removeFirst();
+        schedule(serviceTime(), "endService");
+      </action>
+    </transition>
+  </transitions>
+
+  <functions>
+    <function name="serviceTime" returns="real">
+      <body>
+        return exponential(1.0 / serviceRate);
+      </body>
+    </function>
+  </functions>
+</model>

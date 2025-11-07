@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="QueueingNetwork" type="coupled">
+  <description>
+    A coupled model representing a simple queueing network with a generator,
+    a queue/server, and a sink for collecting statistics.
+  </description>
+
+  <submodels>
+    <submodel name="gen" type="Generator">
+      <parameter name="interArrivalTime" value="2.0"/>
+      <parameter name="maxEntities" value="50"/>
+      <parameter name="distributionType" value="exponential"/>
+    </submodel>
+
+    <submodel name="queue" type="MM1Queue">
+      <parameter name="arrivalRate" value="0.5"/>
+      <parameter name="serviceRate" value="1.0"/>
+    </submodel>
+
+    <submodel name="sink" type="Sink">
+      <parameter name="collectStatistics" value="true"/>
+    </submodel>
+  </submodels>
+
+  <couplings>
+    <coupling>
+      <source submodel="gen" port="out"/>
+      <target submodel="queue" port="arrive"/>
+    </coupling>
+
+    <coupling>
+      <source submodel="queue" port="depart"/>
+      <target submodel="sink" port="in"/>
+    </coupling>
+  </couplings>
+
+  <ports>
+    <input name="externalArrive" type="entity"/>
+    <output name="statistics" type="data"/>
+  </ports>
+
+  <externalCouplings>
+    <coupling>
+      <source external="true" port="externalArrive"/>
+      <target submodel="queue" port="arrive"/>
+    </coupling>
+
+    <coupling>
+      <source submodel="sink" port="stats"/>
+      <target external="true" port="statistics"/>
+    </coupling>
+  </externalCouplings>
+</model>

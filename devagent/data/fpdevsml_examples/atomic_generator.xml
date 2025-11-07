@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="Generator" type="atomic">
+  <description>
+    A simple event generator that produces entities at regular or random intervals.
+    Can be configured for periodic or exponential inter-arrival times.
+  </description>
+
+  <ports>
+    <output name="out" type="entity"/>
+  </ports>
+
+  <states>
+    <state name="active" initial="true"/>
+  </states>
+
+  <variables>
+    <variable name="entityCount" type="integer" initial="0"/>
+    <variable name="interArrivalTime" type="real" value="1.0"/>
+    <variable name="maxEntities" type="integer" value="100"/>
+    <variable name="distributionType" type="string" value="exponential"/>
+  </variables>
+
+  <transitions>
+    <transition from="active" to="active" event="generate">
+      <guard>entityCount &lt; maxEntities</guard>
+      <action>
+        entity e = new Entity(entityCount);
+        output.out = e;
+        entityCount = entityCount + 1;
+        schedule(nextArrival(), "generate");
+      </action>
+    </transition>
+  </transitions>
+
+  <functions>
+    <function name="nextArrival" returns="real">
+      <body>
+        if (distributionType == "exponential") {
+          return exponential(interArrivalTime);
+        } else if (distributionType == "uniform") {
+          return uniform(0, 2 * interArrivalTime);
+        } else {
+          return interArrivalTime;
+        }
+      </body>
+    </function>
+  </functions>
+
+  <initialization>
+    <action>
+      schedule(nextArrival(), "generate");
+    </action>
+  </initialization>
+</model>
